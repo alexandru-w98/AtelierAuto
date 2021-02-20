@@ -7,6 +7,7 @@ namespace AtelierAuto.Constante
     // PA = Polita Asigurare
     public class ConstanteMasini
     {
+        public enum TipMasina { MasinaStandard, Autobuz, Camion}
         public enum ModTransmisie { Manual, Automat}
         public enum Tonaj { }
 

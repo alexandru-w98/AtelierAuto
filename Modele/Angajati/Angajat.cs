@@ -11,6 +11,6 @@ namespace AtelierAuto.Modele.Angajati
         public string Prenume { get; set; }
         public DateTime DataNasterii { get; set; }
         public DateTime DataAngajarii { get; set; }
-        public double CoeficientSalarial { get; set; }
+        public double CoeficientSalarial { get; protected set; }
     }
 }

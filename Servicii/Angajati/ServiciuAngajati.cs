@@ -1,5 +1,6 @@
 ﻿using AtelierAuto.Constante;
 using AtelierAuto.Modele.Angajati;
+using AtelierAuto.Modele.Atelier;
 using AtelierAuto.Modele.Raspunsuri;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace AtelierAuto.Servicii.Angajati
 {
     public class ServiciuAngajati : IServiciuAngajati
     {
-        public List<Angajat> _angajati { get; set; }
+        public List<Angajat> _angajati { get; private set; }
         private int _id;
 
         public ServiciuAngajati()
@@ -27,7 +28,7 @@ namespace AtelierAuto.Servicii.Angajati
 
         public RaspunsServiciu<Angajat> AdaugaAngajat(Angajat angajat)
         {
-            var raspunsValidare = ValideazaAngajat(angajat);
+            var raspunsValidare = ValideazaInformatiiAngajat(angajat);
 
             angajat.Id = _id++;
 
@@ -52,7 +53,7 @@ namespace AtelierAuto.Servicii.Angajati
             }
         }
 
-        public RaspunsServiciu<Angajat> ValideazaAngajat(Angajat angajat)
+        public RaspunsServiciu<Angajat> ValideazaInformatiiAngajat(Angajat angajat)
         {
             var validare = true;
 
@@ -131,6 +132,34 @@ namespace AtelierAuto.Servicii.Angajati
                 Succes = true,
                 Mesaj = ConstanteMesaje.SUCCES
             };
+        }
+
+        public bool ExistaAngajati()
+        {
+            return _angajati.Count() > 0;
+        }
+
+        public RaspunsServiciu<Angajat> CautaAngajatDupaId(int id)
+        {
+            var angajatCautat = _angajati.FirstOrDefault(a => a.Id == id);
+
+            if (angajatCautat == null)
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajatCautat,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.ID_INVALID
+                };
+            } else
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajatCautat,
+                    Succes = true,
+                    Mesaj = ConstanteMesaje.ANGAJAT_GASIT
+                };
+            }
         }
     }
 }
