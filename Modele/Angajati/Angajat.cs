@@ -6,16 +6,11 @@ namespace AtelierAuto.Modele.Angajati
 {
     public abstract class Angajat
     {
-        public int ID { get; set; }
+        public int Id { get; set; }
         public string Nume { get; set; }
         public string Prenume { get; set; }
         public DateTime DataNasterii { get; set; }
         public DateTime DataAngajarii { get; set; }
-        public double CoeficientSalariat { get; set; }
-
-        public virtual double CalculareSalariu()
-        {
-            return (DateTime.Now.Year - DataAngajarii.Year) * CoeficientSalariat * 1000;
-        }
+        public double CoeficientSalarial { get; set; }
     }
 }

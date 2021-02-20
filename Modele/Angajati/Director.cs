@@ -9,7 +9,7 @@ namespace AtelierAuto.Modele.Angajati
     {
         public Director()
         {
-            CoeficientSalariat = ConstanteAngajati.CS_DIRECTOR;
+            CoeficientSalarial = ConstanteAngajati.CS_DIRECTOR;
         }
     }
 }

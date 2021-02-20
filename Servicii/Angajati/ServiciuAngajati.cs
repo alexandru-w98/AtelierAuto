@@ -3,6 +3,7 @@ using AtelierAuto.Modele.Angajati;
 using AtelierAuto.Modele.Raspunsuri;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace AtelierAuto.Servicii.Angajati
@@ -28,7 +29,7 @@ namespace AtelierAuto.Servicii.Angajati
         {
             var raspunsValidare = ValideazaAngajat(angajat);
 
-            angajat.ID = _id++;
+            angajat.Id = _id++;
 
             if (raspunsValidare.Succes)
             {
@@ -78,8 +79,58 @@ namespace AtelierAuto.Servicii.Angajati
         {
             foreach(var angajat in _angajati)
             {
-                Console.WriteLine(angajat.Nume);
+                Console.Write(angajat.Id + " ");
             }
+            Console.WriteLine();
+        }
+
+        public RaspunsServiciu<Angajat> StergereAngajat(int id)
+        {
+            var angajatDeSters = _angajati.FirstOrDefault(a => a.Id == id);
+
+            if (angajatDeSters != null)
+            {
+                _angajati.Remove(angajatDeSters);
+
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajatDeSters,
+                    Succes = true,
+                    Mesaj = ConstanteMesaje.ANGAJAT_STERS
+                };
+            } else
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajatDeSters,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.ID_INVALID
+                };
+            }
+        }
+
+        public RaspunsServiciu<double> CalculeazaSalariu(int id)
+        {
+            var angajatCautat = _angajati.FirstOrDefault(a => a.Id == id);
+            
+            if (angajatCautat == null)
+            {
+                return new RaspunsServiciu<double>
+                {
+                    Continut = 0,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.ID_INVALID
+                };
+            }
+
+            var salariu = (DateTime.Now.Year - angajatCautat.DataAngajarii.Year) * angajatCautat.CoeficientSalarial * ConstanteAngajati.FACTOR_SALARIU;
+
+            return new RaspunsServiciu<double>
+            {
+                Continut = salariu,
+                Succes = true,
+                Mesaj = ConstanteMesaje.SUCCES
+            };
         }
     }
 }

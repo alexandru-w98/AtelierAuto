@@ -9,7 +9,7 @@ namespace AtelierAuto.Modele.Angajati
     {
         public Mecanic()
         {
-            CoeficientSalariat = ConstanteAngajati.CS_MECANIC;
+            CoeficientSalarial = ConstanteAngajati.CS_MECANIC;
         }
     }
 }
