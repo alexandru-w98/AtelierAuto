@@ -11,9 +11,11 @@ namespace AtelierAuto.Servicii.Atelier
 {
     public interface IServiciuAtelier
     {
-        RaspunsServiciu<ComandaAtelier> AdaugaComandaAtelier<T>(T masina, int idAngajat = -1) where T : Masina;
+        RaspunsServiciu<ComandaAtelier> AdaugaComandaAtelier(Masina masina, int idAngajat = -1);
         RaspunsServiciu<ComandaAtelierDTO> AdaugaComandaLaCoada(Masina masina, int idAngajat);
         RaspunsServiciu<ComandaAtelier> EsteAngajatLiber(int idAngajat);
+        IEnumerable<Angajat> ObtineAngajatiDisponibili();
+        string AfiseazaAngajatiDisponibili();
         bool VerificaCapacitateAtelier(Masina masina);
         RaspunsServiciu<Angajat> ObtinePrimulAngajatLiber();
         void AfiseazaCapacitate();

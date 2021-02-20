@@ -126,17 +126,17 @@ namespace AtelierAuto.Servicii.Angajati
 
             var salariu = (DateTime.Now.Year - angajatCautat.DataAngajarii.Year) * angajatCautat.CoeficientSalarial * ConstanteAngajati.FACTOR_SALARIU;
 
+            if (salariu == 0)
+            {
+                salariu = ConstanteAngajati.SALARIU_MINIM;
+            }
+
             return new RaspunsServiciu<double>
             {
                 Continut = salariu,
                 Succes = true,
                 Mesaj = ConstanteMesaje.SUCCES
             };
-        }
-
-        public bool ExistaAngajati()
-        {
-            return Angajati.Count() > 0;
         }
 
         public RaspunsServiciu<Angajat> CautaAngajatDupaId(int id)

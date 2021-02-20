@@ -47,29 +47,57 @@ namespace AtelierAuto.Servicii.Masini
                 EsteMotorDiesel = true,
                 ModTransmisie = Constante.ConstanteMasini.ModTransmisie.Automat
             });
-            _masini.Add(new MasinaStandard
+            _masini.Add(new Autobuz
             {
                 Id = 11,
                 NrKilometri = 150000,
                 AnulFabricatiei = 2005,
+                EsteMotorDiesel = true
+            });
+            _masini.Add(new MasinaStandard
+            {
+                Id = 14,
+                NrKilometri = 150000,
+                AnulFabricatiei = 2005,
                 EsteMotorDiesel = true,
                 ModTransmisie = Constante.ConstanteMasini.ModTransmisie.Automat
             });
-            _masini.Add(new MasinaStandard
+            _masini.Add(new Autobuz
             {
                 Id = 12,
                 NrKilometri = 150000,
                 AnulFabricatiei = 2005,
+                EsteMotorDiesel = true
+            });
+            _masini.Add(new MasinaStandard
+            {
+                Id = 15,
+                NrKilometri = 150000,
+                AnulFabricatiei = 2005,
                 EsteMotorDiesel = true,
                 ModTransmisie = Constante.ConstanteMasini.ModTransmisie.Automat
             });
             _masini.Add(new MasinaStandard
             {
-                Id = 13,
+                Id = 16,
                 NrKilometri = 150000,
                 AnulFabricatiei = 2005,
                 EsteMotorDiesel = true,
                 ModTransmisie = Constante.ConstanteMasini.ModTransmisie.Automat
+            });
+            _masini.Add(new Camion
+            {
+                Id = 17,
+                NrKilometri = 150000,
+                AnulFabricatiei = 2005,
+                EsteMotorDiesel = true
+            });
+            _masini.Add(new Camion
+            {
+                Id = 18,
+                NrKilometri = 150000,
+                AnulFabricatiei = 2005,
+                EsteMotorDiesel = true
             });
         }
 

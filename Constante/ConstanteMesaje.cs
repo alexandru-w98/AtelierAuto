@@ -15,6 +15,7 @@ namespace AtelierAuto.Constante
         public const string ID_INVALID = "Id-ul nu este valid!";
         public const string SUCCES = "Actiunea a fost realizata cu succes!";
         public const string ANGAJATI_INEXISTENTI = "Nu exista niciun angajat!";
+        public const string DIRECTOR_OCUPAT = "Directorul este ocupat momentan!";
 
         public const string COMANDA_ATELIER_ADAUGATA = "Ati fost repartizat!";
         public const string ATELIER_PLIN = "Nu mai are loc acest tip de masina in atelier!";
@@ -23,5 +24,6 @@ namespace AtelierAuto.Constante
         public const string COMANDA_ADAUGATA_LA_COADA = "Ati fost adaugat la coada!";
 
         public const string INFORMATII_INVALIDE = "Ati introdus informatii invalide!";
+        public const string MASINA_INVALIDA = "Aceasta nu este o masina!";
     }
 }

@@ -41,12 +41,23 @@ namespace AtelierAuto.Servicii.Atelier
             _capacitate.Add(ConstanteMasini.TipMasina.MasinaStandard.ToString(), 0);
         }
 
-        public RaspunsServiciu<ComandaAtelier> AdaugaComandaAtelier<T>(T masina, int idAngajat = -1) where T : Masina
+        public RaspunsServiciu<ComandaAtelier> AdaugaComandaAtelier(Masina masina, int idAngajat = -1)
         {
             Angajat angajat;
             if (idAngajat == -1)
             {
-                angajat = new Director();
+                var raspuns = ObtinePrimulAngajatLiber();
+                angajat = raspuns.Continut;
+
+                if (angajat == null)
+                {
+                    return new RaspunsServiciu<ComandaAtelier>
+                    {
+                        Continut = null,
+                        Succes = false,
+                        Mesaj = raspuns.Mesaj
+                    };
+                }
             } else
             {
                 var raspunsAngajat = _serviciuAngajati.CautaAngajatDupaId(idAngajat);
@@ -127,6 +138,16 @@ namespace AtelierAuto.Servicii.Atelier
                 };
             }
 
+            if (raspunsCautareAngajat.Continut.GetType().Name == ConstanteAngajati.TipAngajat.Director.ToString())
+            {
+                return new RaspunsServiciu<ComandaAtelier>
+                {
+                    Continut = null,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.DIRECTOR_OCUPAT
+                };
+            }
+
             return new RaspunsServiciu<ComandaAtelier>
             {
                 Continut = null,
@@ -149,7 +170,7 @@ namespace AtelierAuto.Servicii.Atelier
                 };
             }
 
-            if (masina != null && raspunsCautareAngajat.Continut != null)
+            if (masina != null)
             {
                 var comandaDeAdaugat = new ComandaAtelierDTO
                 {
@@ -171,7 +192,7 @@ namespace AtelierAuto.Servicii.Atelier
                 {
                     Continut = null,
                     Succes = false,
-                    Mesaj = ConstanteMesaje.INFORMATII_INVALIDE
+                    Mesaj = ConstanteMesaje.MASINA_INVALIDA
                 };
             }
         }
@@ -186,6 +207,11 @@ namespace AtelierAuto.Servicii.Atelier
 
         public bool VerificaCapacitateAtelier(Masina masina)
         {
+            if (masina == null)
+            {
+                return false;
+            }
+
             return _capacitate[masina.GetType().Name] < ConstanteAtelier.CAPACITATE_ATELIER[masina.GetType().Name];
         }
 
@@ -205,7 +231,7 @@ namespace AtelierAuto.Servicii.Atelier
 
             foreach (var angajat in _serviciuAngajati.ObtineTotiAngajatii().Continut)
             {
-                if (!angajatiOcupati.Contains(angajat))
+                if (!angajatiOcupati.Contains(angajat) && angajat.GetType().Name != ConstanteAngajati.TipAngajat.Director.ToString())
                 {
                     primulLiber = angajat;
                     break;
@@ -242,6 +268,41 @@ namespace AtelierAuto.Servicii.Atelier
                 Succes = true,
                 Mesaj = ConstanteMesaje.ANGAJAT_GASIT
             };
+        }
+
+        public IEnumerable<Angajat> ObtineAngajatiDisponibili()
+        {
+            var angajatiDisponibili = new List<Angajat>();
+
+            var angajatiOcupati = _comenziAtelier.Select(c => c.Angajat);
+
+            foreach (var angajat in _serviciuAngajati.ObtineTotiAngajatii().Continut)
+            {
+                if (!angajatiOcupati.Contains(angajat) && angajat.GetType().Name != ConstanteAngajati.TipAngajat.Director.ToString())
+                {
+                    angajatiDisponibili.Add(angajat);
+                }
+            }
+
+            return angajatiDisponibili;
+        }
+
+        public string AfiseazaAngajatiDisponibili()
+        {
+            var angajati = ObtineAngajatiDisponibili();
+
+            string afisare = "";
+
+            for (int i = 0; i < angajati.Count(); i++)
+            {
+                afisare += angajati.ElementAt(i).Id + " " + angajati.ElementAt(i).Nume;
+                if (i != angajati.Count() - 1)
+                {
+                    afisare += ", ";
+                }
+            }
+
+            return afisare;
         }
     }
 }

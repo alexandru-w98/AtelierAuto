@@ -17,5 +17,6 @@ namespace AtelierAuto.Constante
 
         public const int START_ID = 0;
         public const int FACTOR_SALARIU = 1000;
+        public const int SALARIU_MINIM = 1300;
     }
 }

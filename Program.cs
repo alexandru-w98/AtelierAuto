@@ -19,9 +19,9 @@ namespace AtelierAuto
             ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Director { Nume = "alex" });
             ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Mecanic { Nume = "alex1", DataAngajarii = new DateTime(2019, 2, 20) });
             ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Asistent { Nume = "alex2", DataAngajarii = new DateTime(2019, 2, 20) });
-            ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Director { Nume = "alex3" });
-            ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Director { Nume = "alex4" });
-            ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Director { Nume = "alex5" });
+            ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Asistent { Nume = "alex3" });
+            ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Asistent { Nume = "alex4" });
+            ServiciuDependente.Get<IServiciuAngajati>().AdaugaAngajat(new Asistent { Nume = "alex5" });
 
             var _serviciuAtelier = ServiciuDependente.Get<IServiciuAtelier>();
             var _serviciuAngajati = ServiciuDependente.Get<IServiciuAngajati>();
@@ -36,11 +36,15 @@ namespace AtelierAuto
 
             while (true)
             {
+                Console.WriteLine();
+                Console.WriteLine();
+                Console.WriteLine();
                 var masina = ServiciuDependente.Get<IServiciuMasini>().ObtineMasina();
                 if (masina == null)
                 {
-                    break;
+                    return;
                 }
+                Console.WriteLine(masina.Id);
                 Console.WriteLine("Doriti sa fiti alocat primului angajat liber = 1");
                 Console.WriteLine("Doriti un anumit angajat = 2");
                 var optiune = Console.ReadKey(true).KeyChar;
@@ -50,7 +54,7 @@ namespace AtelierAuto
                         Console.WriteLine("salut");
                         break;
                     case '2':
-                        _serviciuAngajati.AfiseazaAngajati();
+                        Console.WriteLine(_serviciuAtelier.AfiseazaAngajatiDisponibili());
                         Console.WriteLine("Introduceti id-ul pe care il preferati");
                         var optiune2 = Int32.Parse(Console.ReadKey(true).KeyChar.ToString());
                         var raspuns = _serviciuAtelier.EsteAngajatLiber(optiune2);
@@ -63,7 +67,7 @@ namespace AtelierAuto
                             Console.WriteLine("Angajatul nu este disponibil");
                             Console.WriteLine("Doriti sa plecati = 1 sau asteptati primul angajat liber? = 2");
                             var optiune3 = Int32.Parse(Console.ReadKey(true).KeyChar.ToString());
-                            switch(optiune3)
+                            switch (optiune3)
                             {
                                 case 1:
                                     break;
@@ -73,7 +77,7 @@ namespace AtelierAuto
                                         _serviciuAtelier.AdaugaComandaAtelier(masina);
                                     }
                                     break;
-                                    
+
                             }
                         }
                         _serviciuAtelier.AfiseazaComenziAtelier();
