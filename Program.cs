@@ -25,16 +25,11 @@ namespace AtelierAuto
             //Console.WriteLine(ServiciuDependente.Get<IServiciuAngajati>().CalculeazaSalariu(2).Continut);
             //Console.WriteLine(ServiciuDependente.Get<IServiciuAngajati>().CalculeazaSalariu(1).Continut);
 
-            var raspuns = ServiciuDependente.Get<IServiciuAtelier>().AdaugaLaCoada(new Autobuz(), 2);
-            ServiciuDependente.Get<IServiciuAtelier>().AfiseazaCapacitate();
-            var raspuns3 = ServiciuDependente.Get<IServiciuAtelier>().AdaugaLaCoada(new Autobuz(), 2);
-            var raspuns2 = ServiciuDependente.Get<IServiciuAtelier>().AdaugaLaCoada(new MasinaStandard(), 1);
-            var raspuns4 = ServiciuDependente.Get<IServiciuAtelier>().AdaugaLaCoada(new MasinaStandard(), 1);
-            var raspuns5 = ServiciuDependente.Get<IServiciuAtelier>().AdaugaLaCoada(new MasinaStandard(), 1);
-            var raspuns1 = ServiciuDependente.Get<IServiciuAtelier>().AdaugaLaCoada(new MasinaStandard(), 1);
-
-            Console.WriteLine(raspuns.Mesaj);
-            ServiciuDependente.Get<IServiciuAtelier>().AfiseazaCapacitate();
+            var r1 = ServiciuDependente.Get<IServiciuAtelier>().EsteAngajatLiber(2);
+            Console.WriteLine(r1.Mesaj);
+            var raspuns = ServiciuDependente.Get<IServiciuAtelier>().AdaugaComandaAtelier(new Autobuz(), 2);
+            var r21 = ServiciuDependente.Get<IServiciuAtelier>().EsteAngajatLiber(2);
+            Console.WriteLine(r21.Mesaj);
         }
     }
 }
