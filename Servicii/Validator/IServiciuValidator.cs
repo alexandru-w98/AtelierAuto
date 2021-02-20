@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AtelierAuto.Servicii.Validator
 {
-    public interface IValidator
+    public interface IServiciuValidator
     {
     }
 }

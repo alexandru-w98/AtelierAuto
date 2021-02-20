@@ -4,7 +4,7 @@ using System.Text;
 
 namespace AtelierAuto.Servicii.Validator
 {
-    public class Validator : IValidator
+    public class ServiciuValidator : IServiciuValidator
     {
     }
 }

@@ -1,0 +1,13 @@
+D:\VS Projects\Essensys\AtelierAuto\bin\Debug\netcoreapp3.1\AtelierAuto.exe
+D:\VS Projects\Essensys\AtelierAuto\bin\Debug\netcoreapp3.1\AtelierAuto.deps.json
+D:\VS Projects\Essensys\AtelierAuto\bin\Debug\netcoreapp3.1\AtelierAuto.runtimeconfig.json
+D:\VS Projects\Essensys\AtelierAuto\bin\Debug\netcoreapp3.1\AtelierAuto.runtimeconfig.dev.json
+D:\VS Projects\Essensys\AtelierAuto\bin\Debug\netcoreapp3.1\AtelierAuto.dll
+D:\VS Projects\Essensys\AtelierAuto\bin\Debug\netcoreapp3.1\AtelierAuto.pdb
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.csprojAssemblyReference.cache
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.AssemblyInfoInputs.cache
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.AssemblyInfo.cs
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.csproj.CoreCompileInputs.cache
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.dll
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.pdb
+D:\VS Projects\Essensys\AtelierAuto\obj\Debug\netcoreapp3.1\AtelierAuto.genruntimeconfig.cache

@@ -7,7 +7,7 @@ namespace AtelierAuto.Modele.Angajati
 {
     public class Director : Angajat
     {
-        Director()
+        public Director()
         {
             CoeficientSalariat = ConstanteAngajati.CS_DIRECTOR;
         }
