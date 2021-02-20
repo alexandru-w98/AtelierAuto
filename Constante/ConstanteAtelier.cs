@@ -11,6 +11,13 @@ namespace AtelierAuto.Constante
         public const int TIMP_REPARARE_AUTOBUZ = 30;
         public const int TIMP_REPARARE_CAMION = 40;
 
+        public static readonly Dictionary<string, int> TIMP_REPARARE = new Dictionary<string, int>
+        {
+            { ConstanteMasini.TipMasina.Autobuz.ToString(), TIMP_REPARARE_AUTOBUZ },
+            { ConstanteMasini.TipMasina.MasinaStandard.ToString(), TIMP_REPARARE_STANDARD },
+            { ConstanteMasini.TipMasina.Camion.ToString(), TIMP_REPARARE_CAMION },
+        };
+
         public const int CAPACITATE_STANDARD = 3;
         public const int CAPACITATE_AUTOBUZ = 1;
         public const int CAPACITATE_CAMION = 1;

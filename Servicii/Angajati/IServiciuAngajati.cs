@@ -13,6 +13,7 @@ namespace AtelierAuto.Servicii.Angajati
         RaspunsServiciu<Angajat> StergereAngajat(int id);
         RaspunsServiciu<double> CalculeazaSalariu(int id);
         RaspunsServiciu<Angajat> CautaAngajatDupaId(int id);
+        RaspunsServiciu<IEnumerable<Angajat>> ObtineTotiAngajatii();
         void AfiseazaAngajati();
         bool ExistaAngajati();
         RaspunsServiciu<Angajat> ValideazaInformatiiAngajat(Angajat angajat);

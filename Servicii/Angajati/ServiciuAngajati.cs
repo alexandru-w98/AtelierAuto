@@ -11,12 +11,12 @@ namespace AtelierAuto.Servicii.Angajati
 {
     public class ServiciuAngajati : IServiciuAngajati
     {
-        public List<Angajat> _angajati { get; private set; }
+        public List<Angajat> Angajati { get; private set; }
         private int _id;
 
         public ServiciuAngajati()
         {
-            _angajati = new List<Angajat>();
+            Angajati = new List<Angajat>();
 
             Initializare();
         }
@@ -34,7 +34,7 @@ namespace AtelierAuto.Servicii.Angajati
 
             if (raspunsValidare.Succes)
             {
-                _angajati.Add(angajat);
+                Angajati.Add(angajat);
 
                 return new RaspunsServiciu<Angajat>
                 {
@@ -78,7 +78,7 @@ namespace AtelierAuto.Servicii.Angajati
 
         public void AfiseazaAngajati()
         {
-            foreach(var angajat in _angajati)
+            foreach(var angajat in Angajati)
             {
                 Console.Write(angajat.Id + " ");
             }
@@ -87,11 +87,11 @@ namespace AtelierAuto.Servicii.Angajati
 
         public RaspunsServiciu<Angajat> StergereAngajat(int id)
         {
-            var angajatDeSters = _angajati.FirstOrDefault(a => a.Id == id);
+            var angajatDeSters = Angajati.FirstOrDefault(a => a.Id == id);
 
             if (angajatDeSters != null)
             {
-                _angajati.Remove(angajatDeSters);
+                Angajati.Remove(angajatDeSters);
 
                 return new RaspunsServiciu<Angajat>
                 {
@@ -112,7 +112,7 @@ namespace AtelierAuto.Servicii.Angajati
 
         public RaspunsServiciu<double> CalculeazaSalariu(int id)
         {
-            var angajatCautat = _angajati.FirstOrDefault(a => a.Id == id);
+            var angajatCautat = Angajati.FirstOrDefault(a => a.Id == id);
             
             if (angajatCautat == null)
             {
@@ -136,12 +136,12 @@ namespace AtelierAuto.Servicii.Angajati
 
         public bool ExistaAngajati()
         {
-            return _angajati.Count() > 0;
+            return Angajati.Count() > 0;
         }
 
         public RaspunsServiciu<Angajat> CautaAngajatDupaId(int id)
         {
-            var angajatCautat = _angajati.FirstOrDefault(a => a.Id == id);
+            var angajatCautat = Angajati.FirstOrDefault(a => a.Id == id);
 
             if (angajatCautat == null)
             {
@@ -160,6 +160,26 @@ namespace AtelierAuto.Servicii.Angajati
                     Mesaj = ConstanteMesaje.ANGAJAT_GASIT
                 };
             }
+        }
+
+        public RaspunsServiciu<IEnumerable<Angajat>> ObtineTotiAngajatii()
+        {
+            if (Angajati.Count == 0)
+            {
+                return new RaspunsServiciu<IEnumerable<Angajat>>
+                {
+                    Continut = null,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.ANGAJATI_INEXISTENTI
+                };
+            }
+
+            return new RaspunsServiciu<IEnumerable<Angajat>>
+            {
+                Continut = Angajati,
+                Succes = true,
+                Mesaj = ConstanteMesaje.SUCCES
+            };
         }
     }
 }
