@@ -28,5 +28,8 @@ namespace AtelierAuto.Constante
             { ConstanteMasini.TipMasina.MasinaStandard.ToString(), CAPACITATE_STANDARD },
             { ConstanteMasini.TipMasina.Camion.ToString(), CAPACITATE_CAMION },
         };
+
+        public const string MASINI_REPARATE = "MasiniReparate";
+        public const string AUTOBUZE_NOI_REPARATE = "AutobuzeNoiReparate";
     }
 }

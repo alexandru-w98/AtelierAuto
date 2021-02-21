@@ -9,15 +9,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace AtelierAuto.Servicii.Atelier
 {
     public class ServiciuAtelier : IServiciuAtelier
     {
         public List<ComandaAtelier> _comenziAtelier { get; set; }
-        public List<ComandaAtelierDTO> _coadaComenzi { get; set; }
+        private List<ComandaAtelierDTO> _coadaComenzi { get; set; }
         private IServiciuAngajati _serviciuAngajati;
         private Dictionary<string, int> _capacitate;
+        private List<StatisticaAngajat> _statisticiAngajati;
 
         public bool EsteAtelierDeschis
         {
@@ -29,6 +31,7 @@ namespace AtelierAuto.Servicii.Atelier
             _comenziAtelier = new List<ComandaAtelier>();
             _coadaComenzi = new List<ComandaAtelierDTO>();
             _capacitate = new Dictionary<string, int>();
+            _statisticiAngajati = new List<StatisticaAngajat>();
             _serviciuAngajati = ServiciuDependente.Get<IServiciuAngajati>();
 
             Initializare();
@@ -39,6 +42,8 @@ namespace AtelierAuto.Servicii.Atelier
             _capacitate.Add(ConstanteMasini.TipMasina.Autobuz.ToString(), 0);
             _capacitate.Add(ConstanteMasini.TipMasina.Camion.ToString(), 0);
             _capacitate.Add(ConstanteMasini.TipMasina.MasinaStandard.ToString(), 0);
+
+            var rasp = _serviciuAngajati.ObtineTotiAngajatii();
         }
 
         public RaspunsServiciu<ComandaAtelier> AdaugaComandaAtelier(Masina masina, int idAngajat = -1)
@@ -115,8 +120,9 @@ namespace AtelierAuto.Servicii.Atelier
         public RaspunsServiciu<ComandaAtelier> EsteAngajatLiber(int idAngajat)
         {
             var comanda = _comenziAtelier.FirstOrDefault(comanda => comanda.Angajat.Id == idAngajat);
+            var angajatInCoada = _coadaComenzi.FirstOrDefault(c => c.Angajat.Id == idAngajat);
 
-            if (comanda != null)
+            if (comanda != null || angajatInCoada != null)
             {
                 return new RaspunsServiciu<ComandaAtelier>
                 {
@@ -197,12 +203,19 @@ namespace AtelierAuto.Servicii.Atelier
             }
         }
 
-        public void AfiseazaCoada()
+        public string AfiseazaCoada()
         {
-            foreach (var item in _coadaComenzi)
+            string afisare = "";
+            for (int i = 0; i < _coadaComenzi.Count; i++)
             {
-                Console.WriteLine(item.Angajat.Id + " " + item.Masina.GetType().Name);
+                afisare += _coadaComenzi[i].Masina.GetType().Name + " asteapta la angajat cu id " + _coadaComenzi[i].Angajat.Id;
+                if (i != _coadaComenzi.Count - 1)
+                {
+                    afisare += ", ";
+                }
             }
+
+            return afisare;
         }
 
         public bool VerificaCapacitateAtelier(Masina masina)
@@ -215,12 +228,19 @@ namespace AtelierAuto.Servicii.Atelier
             return _capacitate[masina.GetType().Name] < ConstanteAtelier.CAPACITATE_ATELIER[masina.GetType().Name];
         }
 
-        public void AfiseazaComenziAtelier()
+        public string AfiseazaComenziAtelier()
         {
-            foreach (var item in _comenziAtelier)
+            string afisare = "";
+            for (int i = 0; i < _comenziAtelier.Count; i++)
             {
-                Console.WriteLine(item.Angajat.Id + " " + item.Masina.GetType().Name);
+                afisare += "Angajat cu id " + _comenziAtelier[i].Angajat.Id + " lucreaza la " + _comenziAtelier[i].Masina.GetType().Name;
+                if (i != _comenziAtelier.Count - 1)
+                {
+                    afisare += ", ";
+                }
             }
+
+            return afisare;
         }
 
         public RaspunsServiciu<Angajat> ObtinePrimulAngajatLiber()
@@ -274,7 +294,7 @@ namespace AtelierAuto.Servicii.Atelier
         {
             var angajatiDisponibili = new List<Angajat>();
 
-            var angajatiOcupati = _comenziAtelier.Select(c => c.Angajat);
+            var angajatiOcupati = _comenziAtelier.Select(c => c.Angajat).Concat(_coadaComenzi.Select(c => c.Angajat)).ToList();
 
             foreach (var angajat in _serviciuAngajati.ObtineTotiAngajatii().Continut)
             {
@@ -303,6 +323,200 @@ namespace AtelierAuto.Servicii.Atelier
             }
 
             return afisare;
+        }
+
+        public RaspunsServiciu<ComandaAtelierDTO> StergeComandaDinCoada(ComandaAtelierDTO comandaAtelierDTO)
+        {
+            if (_coadaComenzi.Count() != 0)
+            {
+                if (_coadaComenzi.Remove(comandaAtelierDTO))
+                {
+                    return new RaspunsServiciu<ComandaAtelierDTO>
+                    {
+                        Continut = comandaAtelierDTO,
+                        Succes = true,
+                        Mesaj = ConstanteMesaje.COMANDA_STEARSA_DIN_COADA
+                    };
+                } else
+                {
+                    return new RaspunsServiciu<ComandaAtelierDTO>
+                    {
+                        Continut = null,
+                        Succes = false,
+                        Mesaj = ConstanteMesaje.INFORMATII_INVALIDE
+                    };
+                }
+            } else
+            {
+                return new RaspunsServiciu<ComandaAtelierDTO>
+                {
+                    Continut = null,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.COADA_ESTE_GOALA
+                };
+            }
+        }
+
+        public void VerificaReparatiiTerminate()
+        {
+            foreach (var comanda in _comenziAtelier)
+            {
+                if (comanda.DataPlecarii <= DateTime.Now)
+                {
+                    var raspunsStergere = StergeComandaAtelier(comanda);
+                    if (raspunsStergere.Succes)
+                    {
+                        _capacitate[comanda.Masina.GetType().Name]--;
+                    }
+                    break;
+                }
+            }
+
+            if (EsteAtelierLiber())
+            {
+                foreach (var comandaInCoada in _coadaComenzi)
+                {
+                    if (PoateIntraInAtelier(comandaInCoada))
+                    {
+                        StergeComandaDinCoada(comandaInCoada);
+                        AdaugaComandaAtelier(comandaInCoada.Masina, comandaInCoada.Angajat.Id);
+                        break;
+                    }
+                }
+            }
+        }
+
+        public RaspunsServiciu<ComandaAtelier> StergeComandaAtelier(ComandaAtelier comanda)
+        {
+            if (_comenziAtelier.Remove(comanda))
+            {
+                return new RaspunsServiciu<ComandaAtelier>
+                {
+                    Continut = comanda,
+                    Succes = true,
+                    Mesaj = ConstanteMesaje.COMANDA_ATELIER_STEARSA
+                };
+            } else
+            {
+                return new RaspunsServiciu<ComandaAtelier>
+                {
+                    Continut = comanda,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.INFORMATII_INVALIDE
+                };
+            }
+        }
+
+        public bool PoateIntraInAtelier(ComandaAtelierDTO comandaAtelierDTO)
+        {
+            foreach(var comanda in _comenziAtelier)
+            {
+                if (comanda.Angajat.Id == comandaAtelierDTO.Angajat.Id)
+                {
+                    return false;
+                }
+            }
+
+            if (VerificaCapacitateAtelier(comandaAtelierDTO.Masina))
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public bool EsteAtelierLiber()
+        {
+            if (_comenziAtelier.Count() < (ConstanteAtelier.CAPACITATE_AUTOBUZ + ConstanteAtelier.CAPACITATE_CAMION + ConstanteAtelier.CAPACITATE_STANDARD))
+            {
+                return true;
+            } else
+            {
+                return false;
+            }
+        }
+
+        public RaspunsServiciu<StatisticaAngajat> ModificaStatistica(int idAngajat, string numeCamp, double valoare)
+        {
+            if (_serviciuAngajati.CautaAngajatDupaId(idAngajat).Succes)
+            {
+                if (_statisticiAngajati.FirstOrDefault(s => s.Id == idAngajat) == null)
+                {
+                    _statisticiAngajati.Add(new StatisticaAngajat { Id = idAngajat });
+                }
+            } else
+            {
+                return new RaspunsServiciu<StatisticaAngajat>
+                {
+                    Continut = null,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.ID_INVALID
+                };
+            }
+
+            foreach(var statistica in _statisticiAngajati)
+            {
+                if (statistica.Id == idAngajat)
+                {
+                    if (statistica.GetType().GetProperties().FirstOrDefault(p => p.Name == numeCamp) != null)
+                    {
+                        statistica.GetType().GetProperty(numeCamp).SetValue(statistica, valoare);
+
+                        return new RaspunsServiciu<StatisticaAngajat>
+                        {
+                            Continut = statistica,
+                            Succes = true,
+                            Mesaj = ConstanteMesaje.STATISTICA_MODIFICATA
+                        };
+                    } else
+                    {
+                        return new RaspunsServiciu<StatisticaAngajat>
+                        {
+                            Continut = null,
+                            Succes = false,
+                            Mesaj = ConstanteMesaje.PROPRIETATE_INEXISTENTA
+                        };
+                    }
+                } else
+                {
+                    return new RaspunsServiciu<StatisticaAngajat>
+                    {
+                        Continut = null,
+                        Succes = false,
+                        Mesaj = ConstanteMesaje.ID_INVALID
+                    };
+                }
+            }
+
+            return new RaspunsServiciu<StatisticaAngajat>
+            {
+                Continut = null,
+                Succes = false,
+                Mesaj = ConstanteMesaje.STATISTICA_INEXISTENTA
+            };
+        }
+
+        public RaspunsServiciu<StatisticaAngajat> ObtineStatisticaDupaId(int idAngajat)
+        {
+            var statisticaGasita = _statisticiAngajati.FirstOrDefault(s => s.Id == idAngajat);
+            if (statisticaGasita == null)
+            {
+                return new RaspunsServiciu<StatisticaAngajat>
+                {
+                    Continut = null,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.ID_INVALID
+                };
+            } else
+            {
+                return new RaspunsServiciu<StatisticaAngajat>
+                {
+                    Continut = statisticaGasita,
+                    Succes = true,
+                    Mesaj = ConstanteMesaje.SUCCES
+                };
+            }
         }
     }
 }

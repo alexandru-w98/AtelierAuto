@@ -55,25 +55,42 @@ namespace AtelierAuto.Servicii.Angajati
 
         public RaspunsServiciu<Angajat> ValideazaInformatiiAngajat(Angajat angajat)
         {
-            var validare = true;
-
-            if (validare)
-            {
-                return new RaspunsServiciu<Angajat>
-                {
-                    Continut = angajat,
-                    Succes = true,
-                    Mesaj = ConstanteMesaje.ANGAJAT_VALID
-                };
-            } else
+            if (string.IsNullOrEmpty(angajat.Nume) || angajat.Nume.Length > 30)
             {
                 return new RaspunsServiciu<Angajat>
                 {
                     Continut = angajat,
                     Succes = false,
-                    Mesaj = ConstanteMesaje.ANGAJAT_INVALID
+                    Mesaj = ConstanteMesaje.NUME_INVALID
                 };
             }
+
+            if ((DateTime.Now.Year - angajat.DataNasterii.Year) < 18)
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajat,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.VARSTA_INVALIDA
+                };
+            }
+
+            if (DateTime.Now < angajat.DataAngajarii || angajat.DataAngajarii == null)
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajat,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.DATA_ANGAJARII_INVALIDA
+                };
+            }
+
+            return new RaspunsServiciu<Angajat>
+            {
+                Continut = angajat,
+                Succes = true,
+                Mesaj = ConstanteMesaje.ANGAJAT_VALID
+            };
         }
 
         public void AfiseazaAngajati()
