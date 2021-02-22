@@ -8,7 +8,15 @@ namespace AtelierAuto.Modele.Angajati
     {
         public int Id { get; set; }
         private double _masiniReparate, _autobuzeNoiReparate, _nrSolicitari;
-        private double _bacsis;
+        private double _bacsis, _costPolitePentruMasiniReparate;
+        public double CostPolitePentruMasiniReparate
+        {
+            get => _costPolitePentruMasiniReparate;
+            set
+            {
+                _costPolitePentruMasiniReparate += value;
+            }
+        }
         public double MasiniReparate
         {
             get => _masiniReparate;

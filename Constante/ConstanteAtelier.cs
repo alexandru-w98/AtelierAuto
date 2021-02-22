@@ -31,5 +31,8 @@ namespace AtelierAuto.Constante
 
         public const string MASINI_REPARATE = "MasiniReparate";
         public const string AUTOBUZE_NOI_REPARATE = "AutobuzeNoiReparate";
+        public const string NUMAR_SOLICITARI = "NrSolicitari";
+        public const string BACSIS = "Bacsis";
+        public const string COST_POLITE_MASINI_REPARATE = "CostPolitePentruMasiniReparate";
     }
 }

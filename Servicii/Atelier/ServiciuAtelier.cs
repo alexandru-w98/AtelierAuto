@@ -101,6 +101,16 @@ namespace AtelierAuto.Servicii.Atelier
             _comenziAtelier.Add(comandaAtelier);
             _capacitate[masina.GetType().Name]++;
 
+            ModificaStatistica(angajat.Id, ConstanteAtelier.MASINI_REPARATE, 1);
+            ModificaStatistica(angajat.Id, ConstanteAtelier.BACSIS, masina.CalculeazaPolitaAsigurare(true) * 1 / 100);
+            ModificaStatistica(angajat.Id, ConstanteAtelier.COST_POLITE_MASINI_REPARATE, masina.CalculeazaPolitaAsigurare());
+
+            if (masina.GetType().Name == ConstanteMasini.TipMasina.Autobuz.ToString() &&
+                DateTime.Now.Year -  masina.AnulFabricatiei < 5)
+            {
+                ModificaStatistica(angajat.Id, ConstanteAtelier.AUTOBUZE_NOI_REPARATE, 1);
+            }
+
             return new RaspunsServiciu<ComandaAtelier>
             {
                 Continut = comandaAtelier,
@@ -478,14 +488,6 @@ namespace AtelierAuto.Servicii.Atelier
                             Mesaj = ConstanteMesaje.PROPRIETATE_INEXISTENTA
                         };
                     }
-                } else
-                {
-                    return new RaspunsServiciu<StatisticaAngajat>
-                    {
-                        Continut = null,
-                        Succes = false,
-                        Mesaj = ConstanteMesaje.ID_INVALID
-                    };
                 }
             }
 
@@ -517,6 +519,111 @@ namespace AtelierAuto.Servicii.Atelier
                     Mesaj = ConstanteMesaje.SUCCES
                 };
             }
+        }
+
+        public RaspunsServiciu<Angajat> ObtineCelMaiMuncitorAngajat()
+        {
+            var maxim = -1;
+            int idAngajat = -1;
+
+            foreach(var statistica in _statisticiAngajati)
+            {
+                if (statistica.MasiniReparate > maxim)
+                {
+                    maxim = (int)statistica.MasiniReparate;
+                    idAngajat = statistica.Id;
+                }
+            }
+
+            if (maxim != -1)
+            {
+                var raspuns = _serviciuAngajati.CautaAngajatDupaId(idAngajat);
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = raspuns.Continut,
+                    Succes = raspuns.Succes,
+                    Mesaj = raspuns.Mesaj
+                };
+            } else
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = null,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.STATISTICA_INEXISTENTA
+                };
+            }
+        }
+
+        public string AfiseazaBacsisulAngajatilor()
+        {
+            var afisare = "";
+
+            for (int i = 0; i < _statisticiAngajati.Count; i++)
+            {
+                afisare += "Angajatul cu id " + _statisticiAngajati[i].Id + " a strans " + _statisticiAngajati[i].Bacsis +" lei";
+                if (i != _statisticiAngajati.Count - 1)
+                {
+                    afisare += ", ";
+                }
+            }
+
+            return afisare;
+        }
+
+        public string ObtineCeiMaiSolicitatiAngajati()
+        {
+            var solicitati = _statisticiAngajati.OrderByDescending(s => s.NrSolicitari).Take(3).ToList();
+
+            var afisare = "";
+
+            for(int i = 0; i < solicitati.Count; i++)
+            {
+                var angajat = _serviciuAngajati.CautaAngajatDupaId(solicitati[i].Id);
+                afisare += angajat.Continut.Nume + " " + angajat.Continut.Prenume + " are " + solicitati[i].NrSolicitari + " solicitari";
+                if (i < solicitati.Count - 1 && solicitati[i] != null)
+                {
+                    afisare += ", ";
+                }
+            }
+
+            return afisare;
+        }
+
+        public string ObtineAngajatiCareAuReparatCeleMaiMulteAutobuzeNoi()
+        {
+            var solicitati = _statisticiAngajati.OrderByDescending(s => s.AutobuzeNoiReparate).Take(3).ToList();
+
+            var afisare = "";
+
+            for (int i = 0; i < solicitati.Count; i++)
+            {
+                afisare += "Angajat cu id " + solicitati[i].Id + " a reparat " + solicitati[i].AutobuzeNoiReparate + " autobuze noi";
+                if (i < solicitati.Count - 1 && solicitati[i] != null)
+                {
+                    afisare += ", ";
+                }
+            }
+
+            return afisare;
+        }
+
+        public string ObtineAngajatiCeAuReparatMasiniEgalaCuPolitaMaxima()
+        {
+            var solicitati = _statisticiAngajati.OrderByDescending(s => s.CostPolitePentruMasiniReparate).Take(3).ToList();
+
+            var afisare = "";
+
+            for (int i = 0; i < solicitati.Count; i++)
+            {
+                afisare += "Angajat cu id " + solicitati[i].Id + " au strans " + solicitati[i].CostPolitePentruMasiniReparate + " cost polite pentru masinile reparate!";
+                if (i < solicitati.Count - 1 && solicitati[i] != null)
+                {
+                    afisare += ", ";
+                }
+            }
+
+            return afisare;
         }
     }
 }

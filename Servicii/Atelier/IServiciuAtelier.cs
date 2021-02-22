@@ -29,5 +29,10 @@ namespace AtelierAuto.Servicii.Atelier
         string AfiseazaComenziAtelier();
         RaspunsServiciu<StatisticaAngajat> ModificaStatistica(int idAngajat, string numeCamp, double valoare);
         RaspunsServiciu<StatisticaAngajat> ObtineStatisticaDupaId(int idAngajat);
+        RaspunsServiciu<Angajat> ObtineCelMaiMuncitorAngajat();
+        string AfiseazaBacsisulAngajatilor();
+        string ObtineCeiMaiSolicitatiAngajati();
+        string ObtineAngajatiCareAuReparatCeleMaiMulteAutobuzeNoi();
+        string ObtineAngajatiCeAuReparatMasiniEgalaCuPolitaMaxima();
     }
 }

@@ -65,6 +65,16 @@ namespace AtelierAuto.Servicii.Angajati
                 };
             }
 
+            if (string.IsNullOrEmpty(angajat.Prenume) || angajat.Prenume.Length > 30)
+            {
+                return new RaspunsServiciu<Angajat>
+                {
+                    Continut = angajat,
+                    Succes = false,
+                    Mesaj = ConstanteMesaje.PRENUME_INVALID
+                };
+            }
+
             if ((DateTime.Now.Year - angajat.DataNasterii.Year) < 18)
             {
                 return new RaspunsServiciu<Angajat>

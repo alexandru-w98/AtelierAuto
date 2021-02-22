@@ -17,6 +17,7 @@ namespace AtelierAuto.Constante
         public const string ANGAJATI_INEXISTENTI = "Nu exista niciun angajat!";
         public const string DIRECTOR_OCUPAT = "Directorul este ocupat momentan!";
         public const string NUME_INVALID = "Numele nu trebuie sa fie nul sau sa depaseasca 30 caractere!";
+        public const string PRENUME_INVALID = "Prenumele nu trebuie sa fie nul sau sa depaseasca 30 caractere!";
         public const string VARSTA_INVALIDA = "Angajatul trebuie sa fie major!";
         public const string DATA_ANGAJARII_INVALIDA = "Data angajarii nu poate fi in viitor sau nula!";
 
